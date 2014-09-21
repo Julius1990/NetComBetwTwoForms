@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -10,32 +11,41 @@ namespace NetworkComunicationBetweenTwo
     class _Client
     {
         ClientForm parent;
-        System.Net.Sockets.TcpClient clientSocket;
+        NetworkStream netStream;
+        StreamReader streamReader;
+        StreamWriter streamWriter;
+
         public _Client(ClientForm parent_in)
         {
             parent = parent_in;
         }
         public void start()
         {
-            System.Net.Sockets.TcpClient clientSocket = new System.Net.Sockets.TcpClient();
+            TcpClient socketForServer = new TcpClient();
+            parent.textBoxClientLog.AppendText("Connecting....."+Environment.NewLine);
 
-            clientSocket.Connect("127.0.0.1", 8888);
-            parent.textBoxClientLog.AppendText("Client Socket Program - Server Connected ...");
+            socketForServer.Connect("192.168.178.39", 8001);
+            // use the ipaddress as in the server program
+
+            parent.textBoxClientLog.AppendText("Connected"+Environment.NewLine);
+
+            netStream = socketForServer.GetStream();
+            streamReader = new System.IO.StreamReader(netStream);
+            streamWriter = new StreamWriter(netStream);
         }
 
         public void senden()
         {
-            NetworkStream serverStream = clientSocket.GetStream();
-            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(parent.textBoxSenden.Text + "$");
-            serverStream.Write(outStream, 0, outStream.Length);
-            serverStream.Flush();
+            string gelesen = streamReader.ReadLine();
+            parent.textBoxEmpfangen.AppendText(gelesen);
 
-            byte[] inStream = new byte[10025];
-            serverStream.Read(inStream, 0, (int)clientSocket.ReceiveBufferSize);
-            string returndata = System.Text.Encoding.ASCII.GetString(inStream);
-            parent.textBoxEmpfangen.AppendText(returndata);
+            string senden = parent.textBoxSenden.Text;
+            streamWriter.WriteLine(senden);
+            streamWriter.Flush();
+
             parent.textBoxSenden.Text = "";
-            parent.textBoxSenden.Focus();
+
+            netStream.Close();
         }
     }
 }

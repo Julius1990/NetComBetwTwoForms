@@ -22,5 +22,11 @@ namespace NetworkComunicationBetweenTwo
             ServerForm serverForm = new ServerForm();
             serverForm.ShowDialog();
         }
+
+        private void buttonClient_Click(object sender, EventArgs e)
+        {
+            ClientForm clientForm = new ClientForm();
+            clientForm.ShowDialog();
+        }
     }
 }
