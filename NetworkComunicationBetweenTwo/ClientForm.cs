@@ -13,6 +13,7 @@ namespace NetworkComunicationBetweenTwo
     public partial class ClientForm : Form
     {
         _Client meinClient;
+        _ClientSockets socketClient;
         public ClientForm()
         {
             InitializeComponent();
@@ -20,7 +21,7 @@ namespace NetworkComunicationBetweenTwo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            meinClient.senden();
+            
         }
 
         private void buttonClientStarten_Click(object sender, EventArgs e)
@@ -37,7 +38,7 @@ namespace NetworkComunicationBetweenTwo
 
         private void buttonSocketStart_Click(object sender, EventArgs e)
         {
-            _ClientSockets socketClient = new _ClientSockets(this);
+            socketClient = new _ClientSockets(this);
             socketClient.start();
         }
     }

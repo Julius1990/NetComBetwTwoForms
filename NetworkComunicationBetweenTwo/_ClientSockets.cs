@@ -39,10 +39,18 @@ namespace NetworkComunicationBetweenTwo
             int bytesRec = socket.Receive(bytes);
             parent.textBoxEmpfangen.AppendText("Echoed test: "+ Encoding.ASCII.GetString(bytes, 0, bytesRec)+Environment.NewLine);
 
-            /*Socket schließen und Kommunikation beenden*/
-            socket.Shutdown(SocketShutdown.Both);
-            socket.Close();
+            ///*Socket schließen und Kommunikation beenden*/
+            //socket.Shutdown(SocketShutdown.Both);
+            //socket.Close();
+        }
+        public void send(string message_in)
+        {
+            byte[] messageByte = Encoding.ASCII.GetBytes(message_in);
+            int bytesSend = socket.Send(messageByte);
 
+            byte[] empfangenByte = new byte[1024];
+            int byteEmpfCount = socket.Receive(empfangenByte);
+            parent.textBoxEmpfangen.AppendText(Encoding.ASCII.GetString(empfangenByte, 0, byteEmpfCount) + Environment.NewLine);
         }
     }
 }
