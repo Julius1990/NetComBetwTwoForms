@@ -82,11 +82,13 @@
     <Compile Include="_Client.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="_ClientSimple.cs" />
+    <Compile Include="_ClientSockets.cs" />
+    <Compile Include="_ClientTCP.cs" />
     <Compile Include="_Server.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="_ServerSimple.cs" />
+    <Compile Include="_ServerTCP.cs" />
+    <Compile Include="_ServerSockets.cs" />
     <EmbeddedResource Include="ClientForm.resx">
       <DependentUpon>ClientForm.cs</DependentUpon>
     </EmbeddedResource>
