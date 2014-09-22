@@ -20,36 +20,29 @@ namespace NetworkComunicationBetweenTwo
         {
             parent.textBoxClientLog.AppendText("Connecting..." + Environment.NewLine);
 
+            /*Neuen Socket anlegen über den die Kommunikation laufen soll.
+             Der Endpoint wird mit der IP des Zielcomputers initialisiert.
+             Der Socket wird gestartet.*/
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint serverEndPoint = new IPEndPoint(Dns.Resolve("192.168.178.39").AddressList[0], 6666);
             socket.Connect(serverEndPoint);
             parent.textBoxClientLog.AppendText("Socket connected to "+ socket.RemoteEndPoint.ToString()+Environment.NewLine);
 
-            // Encode the data string into a byte array.
+            /*Nachricht verfassen und als Byte codieren.
+             Anschließend wird die Nachricht gesendet*/
             byte[] msg = Encoding.ASCII.GetBytes("This is a test<EOF>");
-
-            // Send the data through the socket.
             int bytesSent = socket.Send(msg);
 
+            /*In bytes wird die empfangene Nachricht gespeichert
+             bytesRec nimmt die Anzahl der empfangenen Bytes auf*/
             byte[] bytes = new byte[1024];
-
-            // Receive the response from the remote device.
             int bytesRec = socket.Receive(bytes);
-            Console.WriteLine("Echoed test = {0}",
-                Encoding.ASCII.GetString(bytes, 0, bytesRec));
+            parent.textBoxEmpfangen.AppendText("Echoed test: "+ Encoding.ASCII.GetString(bytes, 0, bytesRec)+Environment.NewLine);
 
-            // Release the socket.
+            /*Socket schließen und Kommunikation beenden*/
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
 
-            /*byte[] byteGelesen = new byte[1024];
-            int i = socket.Receive(byteGelesen);
-            char[] einzeln = new char[i];
-            System.Text.Decoder deco = System.Text.Encoding.UTF8.GetDecoder();
-            int charlen = deco.GetChars(byteGelesen, 0, i,einzeln, 0);
-            System.String received = new string(einzeln);
-
-            parent.textBoxEmpfangen.AppendText(received + Environment.NewLine);*/
         }
     }
 }

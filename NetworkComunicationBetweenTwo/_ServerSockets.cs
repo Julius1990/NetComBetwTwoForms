@@ -60,54 +60,13 @@ namespace NetworkComunicationBetweenTwo
                 }
             }
 
-            // Show the data on the console.
-            parent.textBoxServerLog.AppendText("Text received : {0}"+ data+Environment.NewLine);
+            parent.textBoxServerLog.AppendText("Empfangen: "+ data+Environment.NewLine);
 
-            // Echo the data back to the client.
+            /* Als Antwort wird die empfangene Nachricht wieder zurück gesendet */
             byte[] msg = Encoding.ASCII.GetBytes(data);
-
             handler.Send(msg);
             handler.Shutdown(SocketShutdown.Both);
             handler.Close();
-
-            /*
-            while (SocketConnected(server))
-            {
-                Debug.WriteLine("While");
-                Thread.Sleep(5000);
-                parent.textBoxServerLog.AppendText("No Connection yet" + Environment.NewLine);
-            }
-            parent.textBoxServerLog.AppendText("Connection established" + Environment.NewLine);
-
-            if (!SocketConnected(server))
-            {
-                try
-                {
-                    parent.textBoxServerLog.AppendText("Versuche zu senden");
-                    string zuSenden = "Fick dich alter";
-                    byte[] byteZuSenden = System.Text.Encoding.ASCII.GetBytes(zuSenden);
-                    server.Send(byteZuSenden);
-                    byte[] empfB = new byte[1024];
-                    int erm = server.Receive(empfB);
-                }
-                catch (SocketException se)
-                {
-                    MessageBox.Show(se.ErrorCode.ToString());
-                }
-            }
-            else
-            {
-                parent.textBoxServerLog.AppendText("Senden fehlgeschlagen, es besteht keine Verbindung");
-            }*/
-        }
-        private bool SocketConnected(Socket s)
-        {
-            bool part1 = s.Poll(1000, SelectMode.SelectRead);
-            bool part2 = (s.Available == 0);
-            if (part1 && part2)
-                return false;
-            else
-                return true;
         }
     }
 }
