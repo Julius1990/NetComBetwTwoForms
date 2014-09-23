@@ -16,7 +16,7 @@ namespace NetworkComunicationBetweenTwo
         {
             parent = parent_in;
         }
-        public void start()
+        public void verbindung(String botschaft_in)
         {
             parent.textBoxClientLog.AppendText("Connecting..." + Environment.NewLine);
 
@@ -26,31 +26,35 @@ namespace NetworkComunicationBetweenTwo
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint serverEndPoint = new IPEndPoint(Dns.Resolve("192.168.178.39").AddressList[0], 6666);
             socket.Connect(serverEndPoint);
-            parent.textBoxClientLog.AppendText("Socket connected to "+ socket.RemoteEndPoint.ToString()+Environment.NewLine);
+            parent.textBoxClientLog.AppendText("Socket connected to " + socket.RemoteEndPoint.ToString() + Environment.NewLine);
 
             /*Nachricht verfassen und als Byte codieren.
              Anschließend wird die Nachricht gesendet*/
-            byte[] msg = Encoding.ASCII.GetBytes("This is a test<EOF>");
+            string gelesen = botschaft_in+"<EOF>";
+            byte[] msg = Encoding.ASCII.GetBytes(gelesen);
             int bytesSent = socket.Send(msg);
 
             /*In bytes wird die empfangene Nachricht gespeichert
              bytesRec nimmt die Anzahl der empfangenen Bytes auf*/
-            byte[] bytes = new byte[1024];
-            int bytesRec = socket.Receive(bytes);
-            parent.textBoxEmpfangen.AppendText("Echoed test: "+ Encoding.ASCII.GetString(bytes, 0, bytesRec)+Environment.NewLine);
+            string data = null;
+            while (true)
+            {
+                byte[] bytes = new byte[1024];
+                int bytesRec = socket.Receive(bytes);
+                data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
+                if (data.IndexOf("<EOF>") > -1)
+                {
+                    break;
+                }
+            }
 
             ///*Socket schließen und Kommunikation beenden*/
-            //socket.Shutdown(SocketShutdown.Both);
-            //socket.Close();
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Close();
+            parent.textBoxClientLog.AppendText("Connection closed" + Environment.NewLine);
         }
-        public void send(string message_in)
+        public void send()
         {
-            byte[] messageByte = Encoding.ASCII.GetBytes(message_in);
-            int bytesSend = socket.Send(messageByte);
-
-            byte[] empfangenByte = new byte[1024];
-            int byteEmpfCount = socket.Receive(empfangenByte);
-            parent.textBoxEmpfangen.AppendText(Encoding.ASCII.GetString(empfangenByte, 0, byteEmpfCount) + Environment.NewLine);
         }
     }
 }

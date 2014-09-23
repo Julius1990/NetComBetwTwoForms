@@ -21,7 +21,7 @@ namespace NetworkComunicationBetweenTwo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
+            socketClient.send();
         }
 
         private void buttonClientStarten_Click(object sender, EventArgs e)
@@ -39,7 +39,7 @@ namespace NetworkComunicationBetweenTwo
         private void buttonSocketStart_Click(object sender, EventArgs e)
         {
             socketClient = new _ClientSockets(this);
-            socketClient.start();
+            socketClient.verbindung("Test");
         }
     }
 }

@@ -22,6 +22,7 @@ namespace NetworkComunicationBetweenTwo
         public void start()
         {
             TcpClient socketForServer = new TcpClient();
+
             parent.textBoxClientLog.AppendText("Connecting....."+Environment.NewLine);
 
             socketForServer.Connect("192.168.178.39", 8001);

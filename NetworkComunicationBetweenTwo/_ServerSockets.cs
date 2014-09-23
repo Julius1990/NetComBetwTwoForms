@@ -40,33 +40,40 @@ namespace NetworkComunicationBetweenTwo
             so bekommen sie einen "server is busy error".*/
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             server.Bind(ipEndPoint);
-            server.Listen(10);
+            server.Listen(1);
 
-            /*Jetzt wird ein weiter Socket erstellt, dieser ist nötig um etwas senden bzw empfangen zu könnnen. */
-            Socket handler = server.Accept();
-
-            String data = null;
-
-            /*So lange etwas ankommt, wird alles in den String gespeichert. Tritt das Ende der Nachricht ein,
-             ("<EOF>"), so ist der Empfangsvorgang beendet.*/
             while (true)
             {
-                byte[] bytes = new byte[1024];
-                int bytesRec = handler.Receive(bytes);
-                data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
-                if (data.IndexOf("<EOF>") > -1)
+                /*Jetzt wird ein weiter Socket erstellt, dieser ist nötig um etwas senden bzw empfangen 
+                 * zu könnnen. */
+                Socket handler = server.Accept();
+
+                String data = null;
+
+                /*So lange etwas ankommt, wird alles in den String gespeichert. Tritt das Ende der Nachricht ein,
+                 ("<EOF>"), so ist der Empfangsvorgang beendet.*/
+                while (true)
                 {
-                    break;
+                    byte[] bytes = new byte[1024];
+                    int bytesRec = handler.Receive(bytes);
+                    data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
+                    if (data.IndexOf("<EOF>") > -1)
+                    {
+                        break;
+                    }
                 }
+                
+                //data.Remove() Die Endung aus dem String entfernen
+                parent.textBoxServerLog.AppendText("Empfangen: " + data + Environment.NewLine);
+
+                ///* Als Antwort wird die empfangene Nachricht wieder zurück gesendet */
+                byte[] msg = Encoding.ASCII.GetBytes(data);
+                handler.Send(msg);
+
+                handler.Shutdown(SocketShutdown.Both);
+                handler.Close();
+                parent.textBoxServerLog.AppendText("Connection closed" + Environment.NewLine);
             }
-
-            parent.textBoxServerLog.AppendText("Empfangen: "+ data+Environment.NewLine);
-
-            /* Als Antwort wird die empfangene Nachricht wieder zurück gesendet */
-            byte[] msg = Encoding.ASCII.GetBytes(data);
-            handler.Send(msg);
-            handler.Shutdown(SocketShutdown.Both);
-            handler.Close();
         }
     }
 }

@@ -19,14 +19,16 @@ namespace NetworkComunicationBetweenTwo
 
         private void buttonServer_Click(object sender, EventArgs e)
         {
+            //startet den Server
             ServerForm serverForm = new ServerForm();
-            serverForm.ShowDialog();
+            serverForm.Show();
         }
 
         private void buttonClient_Click(object sender, EventArgs e)
         {
+            //startet den Client
             ClientForm clientForm = new ClientForm();
-            clientForm.ShowDialog();
+            clientForm.Show();
         }
     }
 }

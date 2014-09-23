@@ -32,6 +32,7 @@
             this.buttonServerStarten = new System.Windows.Forms.Button();
             this.buttonServerSimpleStart = new System.Windows.Forms.Button();
             this.buttonSocketStart = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // textBoxServerLog
@@ -72,6 +73,10 @@
             this.buttonSocketStart.UseVisualStyleBackColor = true;
             this.buttonSocketStart.Click += new System.EventHandler(this.buttonSocketStart_Click);
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialogServer";
+            // 
             // ServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -94,6 +99,7 @@
         private System.Windows.Forms.Button buttonServerStarten;
         private System.Windows.Forms.Button buttonServerSimpleStart;
         private System.Windows.Forms.Button buttonSocketStart;
+        public System.Windows.Forms.OpenFileDialog openFileDialog1;
 
     }
 }
